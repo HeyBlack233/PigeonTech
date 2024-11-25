@@ -34,7 +34,7 @@ public class PigeonTech implements ModInitializer {
 
             SERVER_STOPPING.register(
                     server -> {
-                        ConfigManager.saveConfig(eventManager.getPTE());
+                        ConfigManager.savePTE(eventManager.getPTE());
                     }
             );
 

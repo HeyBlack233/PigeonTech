@@ -35,9 +35,10 @@ public class ConfigManager {
                             PigeonTech.LOGGER.warn("Found invalid config line: " + line);
                         }
                     }
+                    PigeonTech.LOGGER.info("Config loaded");
 
                     break;
-                } catch (IOException e) {
+                } catch (IOException | IllegalAccessException e) {
                     attempts++;
                     PigeonTech.LOGGER.error("Failed to load config! (attempt " + attempts + ")");
                     e.printStackTrace();
@@ -45,18 +46,16 @@ public class ConfigManager {
                     if (!(attempts < MAX_RETRY)) {
                         throw new RuntimeException();
                     }
-                } catch (IllegalAccessException e) {
-
                 }
             } else {
-                saveConfig(pte);
+                savePTE(pte);
             }
         }
 
         return pte;
     }
 
-    public static void saveConfig(PTEvents pte) {
+    public static void savePTE(PTEvents pte) {
         int attempts = 0;
 
         while (attempts < MAX_RETRY) {
@@ -67,9 +66,10 @@ public class ConfigManager {
                     writer.write(field.getName() + ":" + value);
                     writer.newLine();
                 }
+                PigeonTech.LOGGER.info("Config saved");
 
                 break;
-            } catch (IOException e) {
+            } catch (IOException | IllegalAccessException e) {
                 attempts++;
                 PigeonTech.LOGGER.error("Failed to save config! (attempt " + attempts + ")");
                 e.printStackTrace();
@@ -79,8 +79,6 @@ public class ConfigManager {
 
                     return;
                 }
-            } catch (IllegalAccessException e) {
-
             }
         }
     }
