@@ -20,7 +20,7 @@ import static net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.S
 public class PigeonTech implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
     private static final FabricLoader LOADER = FabricLoader.getInstance();
-    public static EventManager eventManager = new EventManager();
+    public static PTEManager pteManager = new PTEManager();
 
 
     @Override
@@ -28,13 +28,13 @@ public class PigeonTech implements ModInitializer {
         if (LOADER.getEnvironmentType() == EnvType.SERVER) {
             SERVER_STARTED.register(
                     server -> {
-                        eventManager.initialize(ConfigManager.initializePTE());
+                        pteManager.initialize(ConfigManager.initializePTE());
                     }
             );
 
             SERVER_STOPPING.register(
                     server -> {
-                        ConfigManager.savePTE(eventManager.getPTE());
+                        ConfigManager.savePTE(pteManager.getPTE());
                     }
             );
 
@@ -63,12 +63,12 @@ public class PigeonTech implements ModInitializer {
                                                         return builder.buildFuture();
                                                     }
                                             )
-                                            .executes(ctx -> eventManager.viewEventDetail(
+                                            .executes(ctx -> pteManager.viewEventDetail(
                                                     StringArgumentType.getString(ctx, "event"),
                                                     ctx.getSource().getPlayer()
                                             ))
                                             .then(CommandManager.argument("enable", BoolArgumentType.bool())
-                                                    .executes(ctx -> eventManager.setEventCommand(
+                                                    .executes(ctx -> pteManager.setEventCommand(
                                                             ctx.getSource().getPlayer(),
                                                             StringArgumentType.getString(ctx, "event"),
                                                             BoolArgumentType.getBool(ctx, "enable")
@@ -77,7 +77,7 @@ public class PigeonTech implements ModInitializer {
                                     )
                             )
                             .then(CommandManager.literal("listactivated")
-                                    .executes(ctx -> eventManager.showActiveEvents(ctx.getSource().getPlayer()))
+                                    .executes(ctx -> pteManager.showActiveEvents(ctx.getSource().getPlayer()))
                             )
             )));
         }

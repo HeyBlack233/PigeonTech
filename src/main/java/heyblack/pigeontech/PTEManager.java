@@ -3,19 +3,18 @@ package heyblack.pigeontech;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventManager {
-    private static EventManager instance = new EventManager();
+public class PTEManager {
+    private static PTEManager instance = new PTEManager();
 
     private PTEvents pte;
 
-    EventManager() {
+    PTEManager() {
 
     }
 

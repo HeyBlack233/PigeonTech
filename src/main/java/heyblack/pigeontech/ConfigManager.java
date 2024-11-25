@@ -27,7 +27,7 @@ public class ConfigManager {
                     while ((line = reader.readLine()) != null) {
                         String[] str = line.split(":");
                         if (str.length == 2) {
-                            Field field = EventManager.getEventWithId(str[0]);
+                            Field field = PTEManager.getEventWithId(str[0]);
                             if (field != null)
                                 field.setBoolean(pte, Boolean.parseBoolean(str[1]));
                             else PigeonTech.LOGGER.warn("Found invalid pigeon in config: " + str[0]);
