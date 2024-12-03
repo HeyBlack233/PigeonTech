@@ -1,8 +1,6 @@
 package heyblack.pigeontech;
 
 public class PTEvents {
-
-
     @Pigeon(
             displayName = "Example",
             desc = "",

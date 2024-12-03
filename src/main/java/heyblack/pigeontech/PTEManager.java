@@ -10,24 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PTEManager {
-    private static PTEManager instance = new PTEManager();
-
     private PTEvents pte;
+    private List<PTEGroup> groups;
 
     PTEManager() {
 
     }
 
-    public void initialize(PTEvents pte) {
-        this.pte = pte;
+    public void initialize() {
+        if (SaveManager.saveExists()) {
+            this.groups = SaveManager.loadPTE();
+
+        }
     }
 
     public PTEvents getPTE() {
         return this.pte;
-    }
-
-    public void onEventTrigger() {
-
     }
 
     public static Field getEventWithId(String id) {
@@ -200,6 +198,16 @@ public class PTEManager {
     }
 
     public void setEvent(String id, boolean bl) {
-        Field event = getEventWithId(id);
+        try {
+            this.pte.getClass().getDeclaredField(id).setBoolean(pte, bl);
+            onEventTrigger(id);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            PigeonTech.LOGGER.warn("Error when setting pte");
+        }
     }
+
+    public void onEventTrigger(String id) {
+
+    }
+
 }

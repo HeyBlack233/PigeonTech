@@ -10,6 +10,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 
+@Deprecated
 @Environment(EnvType.SERVER)
 public class ConfigManager {
     private static final Path PATH = ((MinecraftServer) FabricLoader.getInstance().getGameInstance()).getSavePath(WorldSavePath.ROOT).resolve("PigeonTech.txt");

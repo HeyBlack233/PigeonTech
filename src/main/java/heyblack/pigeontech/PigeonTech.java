@@ -28,7 +28,7 @@ public class PigeonTech implements ModInitializer {
         if (LOADER.getEnvironmentType() == EnvType.SERVER) {
             SERVER_STARTED.register(
                     server -> {
-                        pteManager.initialize(ConfigManager.initializePTE());
+//                        pteManager.initialize(ConfigManager.initializePTE());
                     }
             );
 
