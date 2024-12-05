@@ -2,6 +2,7 @@ package heyblack.pigeontech;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
@@ -17,24 +18,24 @@ import static net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.S
 //import static net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.START_SERVER_TICK;
 //import static net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.START_WORLD_TICK;
 
-public class PigeonTech implements ModInitializer {
+public class PigeonTech implements DedicatedServerModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
     private static final FabricLoader LOADER = FabricLoader.getInstance();
-    public static PTEManager pteManager = new PTEManager();
-
+    public static PTEManager pteManager;
 
     @Override
-    public void onInitialize() {
+    public void onInitializeServer() {
         if (LOADER.getEnvironmentType() == EnvType.SERVER) {
             SERVER_STARTED.register(
                     server -> {
-//                        pteManager.initialize(ConfigManager.initializePTE());
+                        pteManager = PTEManager.getInstance();
+                        pteManager.initialize();
                     }
             );
 
             SERVER_STOPPING.register(
                     server -> {
-                        ConfigManager.savePTE(pteManager.getPTE());
+//                        ConfigManager.savePTE(pteManager.getPTE());
                     }
             );
 
@@ -50,36 +51,36 @@ public class PigeonTech implements ModInitializer {
 //                }
 //        );
 
-            CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> dispatcher.register(
-                    CommandManager.literal("pigeontech")
-                            .then(CommandManager.literal("event")
-                                    .then(CommandManager.argument("event", StringArgumentType.string())
-                                            .suggests(
-                                                    (ctx, builder) -> {
-                                                        for (Field field : PTEvents.class.getDeclaredFields()) {
-                                                            builder.suggest(field.getName());
-                                                        }
-
-                                                        return builder.buildFuture();
-                                                    }
-                                            )
-                                            .executes(ctx -> pteManager.viewEventDetail(
-                                                    StringArgumentType.getString(ctx, "event"),
-                                                    ctx.getSource().getPlayer()
-                                            ))
-                                            .then(CommandManager.argument("enable", BoolArgumentType.bool())
-                                                    .executes(ctx -> pteManager.setEventCommand(
-                                                            ctx.getSource().getPlayer(),
-                                                            StringArgumentType.getString(ctx, "event"),
-                                                            BoolArgumentType.getBool(ctx, "enable")
-                                                    ))
-                                            )
-                                    )
-                            )
-                            .then(CommandManager.literal("listactivated")
-                                    .executes(ctx -> pteManager.showActiveEvents(ctx.getSource().getPlayer()))
-                            )
-            )));
+//            CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> dispatcher.register(
+//                    CommandManager.literal("pigeontech")
+//                            .then(CommandManager.literal("event")
+//                                    .then(CommandManager.argument("event", StringArgumentType.string())
+//                                            .suggests(
+//                                                    (ctx, builder) -> {
+//                                                        for (Field field : PTEvents.class.getDeclaredFields()) {
+//                                                            builder.suggest(field.getName());
+//                                                        }
+//
+//                                                        return builder.buildFuture();
+//                                                    }
+//                                            )
+//                                            .executes(ctx -> pteManager.viewEventDetail(
+//                                                    StringArgumentType.getString(ctx, "event"),
+//                                                    ctx.getSource().getPlayer()
+//                                            ))
+//                                            .then(CommandManager.argument("enable", BoolArgumentType.bool())
+//                                                    .executes(ctx -> pteManager.setEventCommand(
+//                                                            ctx.getSource().getPlayer(),
+//                                                            StringArgumentType.getString(ctx, "event"),
+//                                                            BoolArgumentType.getBool(ctx, "enable")
+//                                                    ))
+//                                            )
+//                                    )
+//                            )
+//                            .then(CommandManager.literal("listactivated")
+//                                    .executes(ctx -> pteManager.showActiveEvents(ctx.getSource().getPlayer()))
+//                            )
+//            )));
         }
     }
 }

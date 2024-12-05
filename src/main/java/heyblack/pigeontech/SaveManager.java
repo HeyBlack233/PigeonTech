@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.SERVER)
@@ -48,10 +49,10 @@ public class SaveManager {
         Gson gson = new Gson();
         int attempts = 0;
 
-        List<PTEGroup> list;
+        List<PTEGroup> list = new ArrayList<>();
 
         if (!PATH.toFile().exists()) {
-            return null;
+            return list;
         }
 
         while (true) {

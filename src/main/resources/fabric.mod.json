@@ -10,7 +10,7 @@
   "icon": "assets/pigeontech/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "server": [
       "heyblack.pigeontech.PigeonTech"
     ]
   },
