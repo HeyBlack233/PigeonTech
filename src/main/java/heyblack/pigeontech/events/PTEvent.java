@@ -5,11 +5,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public abstract class PTEvents {
-   private String id;
-   private String displayName;
-   private EffectRange effectRange;
-   private EventDuration duration;
+public abstract class PTEvent {
+   private final String id;
+   private final String displayName;
+   private final EffectRange effectRange;
+   private final EventDuration duration;
 
    @Nullable
    private World activeWorld;
@@ -17,14 +17,15 @@ public abstract class PTEvents {
    private Random effectRegion;
    private double effectRegionPortion;
 
-   public PTEvents(String id, String displayName, EffectRange effectRange, EventDuration duration) {
+   public PTEvent(String id, String displayName, EffectRange effectRange, EventDuration duration) {
+      // properties of each event should be assigned in their respective constructor
       this.id = id;
       this.displayName = displayName;
       this.effectRange = effectRange;
       this.duration = duration;
    }
 
-   public abstract void onTrigger();
+   public abstract void trigger();
 
    public String getId() {
       return this.id;

@@ -1,6 +1,6 @@
 package heyblack.pigeontech;
 
-import heyblack.pigeontech.events.PTEvents;
+import heyblack.pigeontech.events.PTEvent;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.ChunkPos;
@@ -13,7 +13,7 @@ import java.util.Random;
 public class PTEManager {
     private List<PTEGroup> groups;
     private List<String> activePTE = new ArrayList<>(); // should be updated each time PTEManager ticks
-    private static final Random random = new Random(((MinecraftServer)FabricLoader.getInstance().getGameInstance()).getWorld(World.OVERWORLD).getSeed());
+    private static final Random RANDOM = new Random(((MinecraftServer)FabricLoader.getInstance().getGameInstance()).getWorld(World.OVERWORLD).getSeed());
 
     private static final PTEManager INSTANCE = new PTEManager();
 
@@ -21,20 +21,20 @@ public class PTEManager {
         return INSTANCE;
     }
 
-    public static boolean isActive(PTEvents pte, World world, ChunkPos chunkPos) {
+    public static boolean isActive(PTEvent pte, World world, ChunkPos chunkPos) {
         for (PTEGroup group : INSTANCE.groups) {
             if (group.getActivePTEAsString().contains(pte.getId())) {
-                if (pte.getEffectRange() == PTEvents.EffectRange.DIMENSIONAL) {
+                if (pte.getEffectRange() == PTEvent.EffectRange.DIMENSIONAL) {
 
                     return group.getWorld() == world.getRegistryKey();
 
-                } else if (pte.getEffectRange() == PTEvents.EffectRange.REGIONAL) {
+                } else if (pte.getEffectRange() == PTEvent.EffectRange.REGIONAL) {
                     Random r = new Random(group.getSeed() ^ chunkPos.toLong());
                     double portion = group.getPower() / 100 * 0.3;
 
                     return r.nextDouble() < portion;
 
-                } else {
+                } else { // EffectRange.GLOBAL
                     return true;
                 }
             }
@@ -57,7 +57,7 @@ public class PTEManager {
         this.activePTE.clear();
 
         for (PTEGroup group : groups) {
-            group.tick(random);
+            group.tick(RANDOM);
             this.activePTE.addAll(group.getActivePTEAsString());
         }
     }
